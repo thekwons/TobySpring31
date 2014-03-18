@@ -9,8 +9,12 @@ import java.sql.SQLException;
 import springbook.user.domain.User;
 
 public class UserDao {
+	private SimpleConnectionMaker simpleConnectionMaker;
+	public UserDao() {
+		simpleConnectionMaker = new SimpleConnectionMaker();
+	}
 	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = getConnection();
+		Connection c = simpleConnectionMaker.makeNewConnection();
 		PreparedStatement ps = c
 				.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 		ps.setString(1, user.getId());
@@ -25,7 +29,7 @@ public class UserDao {
 
 
 	public User get(String id) throws ClassNotFoundException, SQLException {
-		Connection c = getConnection();
+		Connection c = simpleConnectionMaker.makeNewConnection();
 		PreparedStatement ps = c
 				.prepareStatement("select * from users where id=?");
 		ps.setString(1, id);
@@ -44,20 +48,6 @@ public class UserDao {
 		return user;
 	}
 	
-	/**
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * Separation of Concern
-	 */
-	private Connection getConnection() throws ClassNotFoundException,
-			SQLException {
-		Class.forName("org.postgresql.Driver");
-		Connection c = DriverManager.getConnection(
-				"jdbc:postgresql://localhost/testdb", "postgres", "");
-		return c;
-	}
-
 	public static void main(String [] args)throws ClassNotFoundException, SQLException {
 		UserDao dao = new UserDao();
 		User user = new User();
