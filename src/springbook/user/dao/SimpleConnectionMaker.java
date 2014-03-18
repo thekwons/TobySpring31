@@ -8,7 +8,7 @@ public class SimpleConnectionMaker {
 	public Connection makeNewConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("org.postgresql.Driver");
 		Connection c = DriverManager.getConnection(
-				"jdbc:postgresql://localhost/testdb", "postgres", "");
+				"jdbc:postgresql://localhost/TestDB", "postgres", "postgres");
 		return c;
 
 	}
